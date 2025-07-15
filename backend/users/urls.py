@@ -1,9 +1,7 @@
-# backend/urls.py
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from . import views
 
 urlpatterns = [
-
-    path('admin/', admin.site.urls),
-    path('api/', include('users.urls')),
+    path('login/', views.login_view),
+    path('register/', views.register_view),
 ]
