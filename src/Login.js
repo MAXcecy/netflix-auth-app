@@ -1,18 +1,21 @@
 // src/Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = isRegistering
       ? 'http://localhost:8000/api/register/' // endpoint para registro
       : 'http://localhost:8000/api/login/';   // endpoint para login
+
     try {
       const response = await axios.post(url, {
         username,
@@ -22,8 +25,11 @@ const Login = () => {
       if (isRegistering) {
         setMessage('Registro exitoso. Ahora puedes iniciar sesión.');
       } else {
-        setMessage('Inicio de sesión exitoso.');
-        console.log('Token recibido:', response.data);
+        // Guardar el token en localStorage
+        localStorage.setItem('token', response.data.token);
+        
+        // Redirigir a /movies
+        navigate('/movies');
       }
     } catch (error) {
       setMessage('Hubo un error. Verifica tus datos.');
